@@ -1,15 +1,11 @@
 # See https://atom.io/docs/latest/creating-a-package#menus for more details
-'context-menu':
-  '.overlayer':
-      'Enable auto-update-packages': 'auto-update-packages:toggle'
-
 'menu': [
   {
     'label': 'Packages'
     'submenu': [
-      'label': 'auto-update-packages'
+      'label': 'Auto Update Packages'
       'submenu': [
-        { 'label': 'Toggle', 'command': 'auto-update-packages:toggle' }
+        { 'label': 'Update Now', 'command': 'auto-update-packages:update-now' }
       ]
     ]
   }

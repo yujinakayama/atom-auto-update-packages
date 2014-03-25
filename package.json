@@ -3,7 +3,6 @@
   "main": "./lib/auto-update-packages",
   "version": "0.0.0",
   "description": "A short description of your package",
-  "activationEvents": ["auto-update-packages:toggle"],
   "repository": "https://github.com/atom/auto-update-packages",
   "license": "MIT",
   "engines": {
