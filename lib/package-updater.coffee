@@ -2,6 +2,7 @@ path = require 'path'
 glob = require 'glob'
 {BufferedProcess} = require 'atom'
 
+ATOM_BUNDLE_IDENTIFIER = 'com.github.atom'
 INSTALLATION_LINE_PATTERN = /^Installing +([^@]+)@(\S+).+\s+(\S+)$/
 
 module.exports =
@@ -13,7 +14,8 @@ module.exports =
       @notify
         title: 'Atom Package Updates'
         message: summary
-        sender: 'com.github.atom'
+        sender: ATOM_BUNDLE_IDENTIFIER
+        activate: ATOM_BUNDLE_IDENTIFIER
 
   runApmUpgrade: (callback) ->
     command = atom.packages.getApmPath()
