@@ -1,5 +1,30 @@
-# auto-update-packages package
+# Auto-Update-Packages for Atom
 
-A short description of your package.
+Keep your Atom packages up to date.
 
-![A screenshot of your spankin' package](https://f.cloud.github.com/assets/69169/2290250/c35d867a-a017-11e3-86be-cd7c5bf3ff9b.gif)
+![Screenshot](https://f.cloud.github.com/assets/83656/2521579/c30d4b2a-b4ac-11e3-898a-5c763e9a1c5a.png)
+
+## Installation
+
+```bash
+$ apm install auto-update-packages
+```
+
+## Usage
+
+Just sit tight. :)
+
+`auto-update-packages` automatically checks for package updates every 6 hours.
+If any update is available, it installs them and notifies you via OS X Notification Center.
+
+Note that after the update you need to **Reload** (⌃⌥⌘L)
+to apply the updates to the opened Atom window.
+
+If you're impatient,
+run **Packages** menu > **Auto Update Packages** > **Update Now**.
+
+## License
+
+Copyright (c) 2014 Yuji Nakayama
+
+See the [LICENSE.md](LICENSE.md) for details.
