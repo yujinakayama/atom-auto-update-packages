@@ -16,7 +16,7 @@ $ apm install auto-update-packages
 
 Just sit tight. :)
 
-`auto-update-packages` automatically checks for package updates every 6 hours.
+`auto-update-packages` automatically checks for package updates every 6 hours by default.
 If any updates are available, it installs them and notifies you via OS X Notification Center.
 
 Note that after the update you need to **Reload** (⌃⌥⌘L)
@@ -24,6 +24,27 @@ to apply the updates to the opened Atom window.
 
 If you're impatient,
 run **Packages** menu > **Auto Update Packages** > **Update Now**.
+
+## Configuration
+
+You can change the auto-update interval by editing `~/.atom/config.cson`
+(choose **Open Your Config** in **Atom** menu):
+
+```cson
+# Some other settings...
+'auto-update-packages':
+  'intervalMinutes': 180
+```
+
+### `auto-update-packages.intervalMinutes`
+
+* Default: 360 minutes (6 hours)
+* Minimum: 15 minutes
+
+If you specify a value less than 15, it will be handled as 15.
+
+Note that `auto-update-packages` does not adhere the value strictly.
+It has some margin around 5%.
 
 ## License
 
