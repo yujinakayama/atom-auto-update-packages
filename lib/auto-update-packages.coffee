@@ -9,6 +9,7 @@ second = (s) -> s * 1000
 minute = (m) -> second(m * 60)
 hour   = (h) -> minute(h * 60)
 
+WARMUP_WAIT = second(10)
 AUTO_UPDATE_CHECK_INTERVAL = minute(15)
 AUTO_UPDATE_BLOCK_DURATION = hour(6)
 
@@ -17,15 +18,24 @@ module.exports =
     atom.workspaceView.command 'auto-update-packages:update-now', =>
       @updatePackages(false)
 
+    setTimeout =>
+      @enableAutoUpdate()
+    , WARMUP_WAIT
+
+  deactivate: ->
+    @disableAutoUpdate()
+    atom.workspaceView.off 'auto-update-packages:update-now'
+
+  enableAutoUpdate: ->
     @updatePackagesIfAutoUpdateBlockIsExpired()
 
     @autoUpdateCheck = setInterval =>
       @updatePackagesIfAutoUpdateBlockIsExpired()
     , AUTO_UPDATE_CHECK_INTERVAL
 
-  deactivate: ->
-    clearInterval(@autoUpdateCheck)
-    atom.workspaceView.off 'auto-update-packages:update-now'
+  disableAutoUpdate: ->
+    clearInterval(@autoUpdateCheck) if @autoUpdateCheck
+    @autoUpdateCheck = null
 
   updatePackagesIfAutoUpdateBlockIsExpired: ->
     lastUpdateTime = @loadLastUpdateTime() || 0
