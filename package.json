@@ -2,8 +2,8 @@
   "name": "auto-update-packages",
   "main": "./lib/auto-update-packages",
   "version": "0.0.0",
-  "description": "A short description of your package",
-  "repository": "https://github.com/atom/auto-update-packages",
+  "description": "Keep your Atom packages up to date.",
+  "repository": "https://github.com/yujinakayama/atom-auto-update-packages",
   "license": "MIT",
   "engines": {
     "atom": ">0.50.0"
