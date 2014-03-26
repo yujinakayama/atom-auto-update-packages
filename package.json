@@ -9,9 +9,13 @@
     "atom": ">0.50.0"
   },
   "dependencies": {
+    "glob": "^3.2.9"
   },
   "devDependencies": {
     "coffee-script": "^1.7.1",
     "coffeelint": "^1.1.0"
+  },
+  "scripts": {
+    "prepublish": "rake vendor:terminal_notifier"
   }
 }
