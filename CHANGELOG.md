@@ -2,6 +2,10 @@
 
 ## Development
 
+## v0.2.1
+
+* Always display the input field for the custom auto-update interval in the Settings view. ([@yujinakayama])
+
 ## v0.2.0
 
 * [#1](https://github.com/yujinakayama/atom-auto-update-packages/issues/1): Allow to configure auto-update interval with config `auto-update-packages.intervalMinutes`. ([@yujinakayama])

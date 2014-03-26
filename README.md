@@ -27,21 +27,20 @@ run **Packages** menu > **Auto Update Packages** > **Update Now**.
 
 ## Configuration
 
-You can change the auto-update interval by editing `~/.atom/config.cson`
-(choose **Open Your Config** in **Atom** menu):
+You can configure `auto-update-packages`
+either
+in the Settings view (**Preferences...** in **Atom** menu)
+or
+in `~/.atom/config.cson` (**Open Your Config** in **Atom** menu):
 
-```cson
-# Some other settings...
-'auto-update-packages':
-  'intervalMinutes': 180
-```
+### Interval Minutes
 
-### `auto-update-packages.intervalMinutes`
-
+* Config Key Path: `auto-update-packages.intervalMinutes`
 * Default: 360 minutes (6 hours)
 * Minimum: 15 minutes
 
-If you specify a value less than 15, it will be handled as 15.
+Specify an auto-update interval.
+If you specify a value less than 15, it will be handled as 15 internally.
 
 Note that `auto-update-packages` does not adhere the value strictly.
 It has some margin around 5%.
