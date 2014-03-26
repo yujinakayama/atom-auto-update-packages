@@ -9,7 +9,8 @@
     "atom": ">0.50.0"
   },
   "dependencies": {
-    "glob": "^3.2.9"
+    "glob": "^3.2.9",
+    "fs-plus": "^2.0.4"
   },
   "devDependencies": {
     "coffee-script": "^1.7.1",
