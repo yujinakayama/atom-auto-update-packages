@@ -10,6 +10,7 @@ module.exports =
       @updatePackages(false)
 
   deactivate: ->
+    atom.workspaceView.off 'auto-update-packages:update-now'
 
   updatePackages: (isAutoUpdate = true) ->
     @runApmUpgrade (log) =>
