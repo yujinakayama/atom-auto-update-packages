@@ -2,6 +2,10 @@
 
 ## Development
 
+## v0.1.3
+
+* Omit package names in notification message when there are more than 5 updates. ([@yujinakayama])
+
 ## v0.1.2
 
 * Fix a bug `terminal-notifier` was not bundled _again_. ([@yujinakayama])

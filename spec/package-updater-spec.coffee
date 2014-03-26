@@ -90,6 +90,19 @@ describe 'PackageUpdater', ->
         expect(summary).toBe('atom-lint, sort-lines, language-slim and language-haskell ' +
                              'have been updated automatically.')
 
+    describe 'when more than 5 packages are updated', ->
+      it 'omits the package names', ->
+        entries = [
+          { name: 'atom-lint',        isInstalled: true }
+          { name: 'sort-lines',       isInstalled: true }
+          { name: 'language-slim',    isInstalled: true }
+          { name: 'language-haskell', isInstalled: true }
+          { name: 'language-ruby',    isInstalled: true }
+          { name: 'language-python',  isInstalled: true }
+        ]
+        summary = PackageUpdater.generateSummary(entries)
+        expect(summary).toBe('6 packages have been updated automatically.')
+
     describe 'when non-auto-update', ->
       it 'does not say "automatically"', ->
         entries = [

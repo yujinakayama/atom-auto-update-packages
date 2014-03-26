@@ -54,7 +54,12 @@ module.exports =
     names = successfulEntries.map (entry) ->
       entry.name
 
-    summary = @generateEnumerationExpression(names)
+    summary =
+      if successfulEntries.length <= 5
+        @generateEnumerationExpression(names)
+      else
+        "#{successfulEntries.length} packages"
+
     summary += if successfulEntries.length == 1 then ' has' else ' have'
     summary += ' been updated'
     summary += ' automatically' if isAutoUpdate
