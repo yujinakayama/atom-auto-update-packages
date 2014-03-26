@@ -1,4 +1,4 @@
-[![Build Status](http://img.shields.io/travis/yujinakayama/atom-auto-update-packages/master.svg)](https://travis-ci.org/yujinakayama/atom-auto-update-packages)
+[![Build Status](https://travis-ci.org/yujinakayama/atom-auto-update-packages.svg?branch=master)](https://travis-ci.org/yujinakayama/atom-auto-update-packages)
 
 # Auto-Update-Packages for Atom
 
