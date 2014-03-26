@@ -27,4 +27,4 @@ run **Packages** menu > **Auto Update Packages** > **Update Now**.
 
 Copyright (c) 2014 Yuji Nakayama
 
-See the [LICENSE.md](LICENSE.md) for details.
+See the [LICENSE.txt](LICENSE.txt) for details.
