@@ -101,3 +101,11 @@ describe 'auto-upgrade-packages', ->
         summary = AutoUpdatePackages.generateSummary(entries)
         expect(summary).toBe('atom-lint, sort-lines, language-slim and language-haskell ' +
                              'have been updated automatically.')
+
+    describe 'when non-auto-update', ->
+      it 'does not say "automatically"', ->
+        entries = [
+          { name: 'atom-lint',  isInstalled: true }
+        ]
+        summary = AutoUpdatePackages.generateSummary(entries, false)
+        expect(summary).toBe('atom-lint has been updated.')

@@ -7,14 +7,14 @@ INSTALLATION_LINE_PATTERN = /^Installing +([^@]+)@(\S+).+\s+(\S+)$/
 module.exports =
   activate: (state) ->
     atom.workspaceView.command 'auto-update-packages:update-now', =>
-      @updatePackages()
+      @updatePackages(false)
 
   deactivate: ->
 
-  updatePackages: ->
+  updatePackages: (isAutoUpdate = true) ->
     @runApmUpgrade (log) =>
       entries = @parseLog(log)
-      summary = @generateSummary(entries)
+      summary = @generateSummary(entries, isAutoUpdate)
       return unless summary
       @notify
         title: 'Atom Package Updates'
@@ -50,7 +50,7 @@ module.exports =
       'version': version
       'isInstalled': result == '\u2713'
 
-  generateSummary: (entries) ->
+  generateSummary: (entries, isAutoUpdate = true) ->
     successfulEntries = entries.filter (entry) ->
       entry.isInstalled
     return null unless successfulEntries.length > 0
@@ -60,7 +60,9 @@ module.exports =
 
     summary = @generateEnumerationExpression(names)
     summary += if successfulEntries.length == 1 then ' has' else ' have'
-    summary += ' been updated automatically.'
+    summary += ' been updated'
+    summary += ' automatically' if isAutoUpdate
+    summary += '.'
     summary
 
   generateEnumerationExpression: (items) ->
