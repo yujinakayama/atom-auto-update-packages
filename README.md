@@ -17,7 +17,7 @@ $ apm install auto-update-packages
 Just sit tight. :)
 
 `auto-update-packages` automatically checks for package updates every 6 hours.
-If any update is available, it installs them and notifies you via OS X Notification Center.
+If any updates are available, it installs them and notifies you via OS X Notification Center.
 
 Note that after the update you need to **Reload** (⌃⌥⌘L)
 to apply the updates to the opened Atom window.
