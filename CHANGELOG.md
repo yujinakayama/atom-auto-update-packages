@@ -2,6 +2,10 @@
 
 ## Development
 
+## v0.1.2
+
+* Fix a bug `terminal-notifier` was not bundled _again_. ([@yujinakayama])
+
 ## v0.1.1
 
 * Fix a bug `terminal-notifier` was not bundled. ([@yujinakayama])
