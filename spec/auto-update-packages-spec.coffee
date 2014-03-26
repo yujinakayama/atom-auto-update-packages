@@ -43,3 +43,50 @@ describe 'auto-upgrade-packages', ->
         spyOn(AutoUpdatePackages, 'updatePackages')
         AutoUpdatePackages.updatePackagesIfAutoUpdateBlockIsExpired()
         expect(AutoUpdatePackages.updatePackages).not.toHaveBeenCalled()
+
+  describe '.getAutoUpdateBlockDuration', ->
+    originalConfig = atom.config.get('auto-update-packages')
+
+    afterEach ->
+      atom.config.set('auto-update-packages', originalConfig)
+
+    describe 'when "auto-update-packages.intervalMinutes" is not set', ->
+      beforeEach ->
+        atom.config.set('auto-update-packages.intervalMinutes', null)
+
+      it 'returns 21600000 (6 hours)', ->
+        expect(AutoUpdatePackages.getAutoUpdateBlockDuration()).toBe(21600000)
+
+    describe 'when "auto-update-packages.intervalMinutes" is 30', ->
+      beforeEach ->
+        atom.config.set('auto-update-packages.intervalMinutes', 30)
+
+      it 'returns 1800000', ->
+        expect(AutoUpdatePackages.getAutoUpdateBlockDuration()).toBe(1800000)
+
+    describe 'when "auto-update-packages.intervalMinutes" is 14', ->
+      beforeEach ->
+        atom.config.set('auto-update-packages.intervalMinutes', 14)
+
+      it 'returns 900000 (15 minutes) to avoid too frequent access to the server', ->
+        expect(AutoUpdatePackages.getAutoUpdateBlockDuration()).toBe(900000)
+
+  describe '.getAutoUpdateCheckInterval', ->
+    originalConfig = atom.config.get('auto-update-packages')
+
+    afterEach ->
+      atom.config.set('auto-update-packages', originalConfig)
+
+    describe 'when "auto-update-packages.intervalMinutes" is not set', ->
+      beforeEach ->
+        atom.config.set('auto-update-packages.intervalMinutes', null)
+
+      it 'returns 1440000 (24 minutes)', ->
+        expect(AutoUpdatePackages.getAutoUpdateCheckInterval()).toBe(1440000)
+
+    describe 'when "auto-update-packages.intervalMinutes" is 30', ->
+      beforeEach ->
+        atom.config.set('auto-update-packages.intervalMinutes', 30)
+
+      it 'returns 120000 (2 minutes)', ->
+        expect(AutoUpdatePackages.getAutoUpdateCheckInterval()).toBe(120000)
