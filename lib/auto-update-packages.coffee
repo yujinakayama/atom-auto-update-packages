@@ -30,7 +30,14 @@ module.exports =
       @updatePackagesIfAutoUpdateBlockIsExpired()
     , @getAutoUpdateCheckInterval()
 
+    @configSubscription = atom.config.observe NAMESPACE, callNow: false, =>
+      @disableAutoUpdate()
+      @enableAutoUpdate()
+
   disableAutoUpdate: ->
+    @configSubscription?.off()
+    @configSubscription = null
+
     clearInterval(@autoUpdateCheck) if @autoUpdateCheck
     @autoUpdateCheck = null
 
