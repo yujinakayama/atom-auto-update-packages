@@ -5,6 +5,7 @@
   "description": "Keep your Atom packages up to date.",
   "repository": "https://github.com/yujinakayama/atom-auto-update-packages",
   "license": "MIT",
+  "os": ["darwin"],
   "engines": {
     "atom": ">0.50.0"
   },
