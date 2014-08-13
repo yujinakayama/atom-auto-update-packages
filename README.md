@@ -45,6 +45,19 @@ If you specify a value less than 15, it will be handled as 15 internally.
 Note that auto-update-packages does not adhere the value strictly.
 It has some margin around 5%.
 
+### Blacklist
+
+* Config Key Path: `auto-update-packages.blacklist`
+* Default: None
+* Type: CSV
+
+If, for any reason, you feel the urge to exclude some package from updating automatically,
+add its name to the **Blacklist**.
+
+Note: Separate values by commas (and optionally spaces) and use their human-friendly names, as in:
+
+`Auto Update Packages, Welcome, Asteroids` etc.
+
 ## License
 
 Copyright (c) 2014 Yuji Nakayama

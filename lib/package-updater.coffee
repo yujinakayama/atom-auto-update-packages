@@ -3,11 +3,20 @@ glob = require 'glob'
 {BufferedProcess} = require 'atom'
 
 ATOM_BUNDLE_IDENTIFIER = 'com.github.atom'
-INSTALLATION_LINE_PATTERN = /^Installing +([^@]+)@(\S+).+\s+(\S+)$/
+INSTALLATION_LINE_PATTERN = /^Installing +(\S+).+\s+(\S+)$/
+
+titlecase = (string) ->
+  string.replace(/\w+S*/g, (s) -> s[0].toUpperCase() + s[1..].toLowerCase())
+
+undasherize = (string) ->
+  string.replace(/-/g, ' ')
+
+humanize = (string) ->
+  titlecase(undasherize(string))
 
 module.exports =
-  updatePackages: (isAutoUpdate = true) ->
-    @runApmUpgrade (log) =>
+  updatePackages: (isAutoUpdate = true, blacklist = []) ->
+    @runApmUpgrade blacklist, (log) =>
       entries = @parseLog(log)
       summary = @generateSummary(entries, isAutoUpdate)
       return unless summary
@@ -17,10 +26,8 @@ module.exports =
         sender: ATOM_BUNDLE_IDENTIFIER
         activate: ATOM_BUNDLE_IDENTIFIER
 
-  runApmUpgrade: (callback) ->
+  runApmCommand: (args, callback) ->
     command = atom.packages.getApmPath()
-    args = ['upgrade', '--no-confirm', '--no-color']
-
     log = ''
 
     stdout = (data) ->
@@ -31,6 +38,25 @@ module.exports =
 
     new BufferedProcess({command, args, stdout, exit})
 
+
+  runApmUpgrade: (blacklist, callback) ->
+    args = ['upgrade', '--list', '--json', '--no-color']
+
+    @runApmCommand args, (log) =>
+      packageList = JSON.parse(log)
+      outdatedPackages = (pack.name for pack in packageList)
+
+      if blacklist?.length
+        outdatedPackages =
+          pack for pack in outdatedPackages when humanize(pack) not in blacklist
+
+      @runApmInstall outdatedPackages, callback
+
+  runApmInstall: (packages, callback) ->
+    args = ['install', '--no-color'].concat(packages)
+
+    @runApmCommand args, callback
+
   # Parsing the output of apm is a dirty way, but using atom-package-manager directly via JavaScript
   # is probably more brittle than parsing the output since it's a private package.
   # /Applications/Atom.app/Contents/Resources/app/apm/node_modules/atom-package-manager
@@ -40,19 +66,16 @@ module.exports =
     for line in lines
       matches = line.match(INSTALLATION_LINE_PATTERN)
       continue unless matches?
-      [_match, name, version, result] = matches
+      [_match, name, result] = matches
 
       'name': name
-      'version': version
       'isInstalled': result == '\u2713'
 
   generateSummary: (entries, isAutoUpdate = true) ->
-    successfulEntries = entries.filter (entry) ->
-      entry.isInstalled
+    successfulEntries = (entry for entry in entries when entry.isInstalled)
     return null unless successfulEntries.length > 0
 
-    names = successfulEntries.map (entry) ->
-      entry.name
+    names = (humanize(entry.name) for entry in successfulEntries)
 
     summary =
       if successfulEntries.length <= 5
@@ -74,7 +97,7 @@ module.exports =
         if index + 1 < items.length
           expression += ', '
         else
-          expression += ' and '
+          expression += ', and '
 
       expression += item
 
@@ -91,14 +114,10 @@ module.exports =
     new BufferedProcess({command, args})
 
   getTerminalNotifierPath: ->
-    unless @cachedTerminalNotifierPath == undefined
+    unless @cachedTerminalNotifierPath?
       return @cachedTerminalNotifierPath
 
     pattern = path.join(__dirname, '..', 'vendor', '**', 'terminal-notifier')
     paths = glob.sync(pattern)
 
-    @cachedTerminalNotifierPath =
-      if paths.length == 0
-        null
-      else
-        paths[0]
+    @cachedTerminalNotifierPath = paths[0]
