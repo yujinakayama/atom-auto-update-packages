@@ -7,9 +7,11 @@ getFs = ->
 
 NAMESPACE = 'auto-update-packages'
 CONFIG_KEY_INTERVAL_MINUTES = 'intervalMinutes'
+CONFIG_KEY_BLACKLIST = 'blacklist'
 
 CONFIG_DEFAULTS = {}
 CONFIG_DEFAULTS[CONFIG_KEY_INTERVAL_MINUTES] = 6 * 60
+CONFIG_DEFAULTS[CONFIG_KEY_BLACKLIST] = ""
 
 WARMUP_WAIT = 10 * 1000
 MINIMUM_AUTO_UPDATE_BLOCK_DURATION_MINUTES = 15
@@ -54,11 +56,13 @@ module.exports =
 
   updatePackages: (isAutoUpdate = true) ->
     PackageUpdater ?= require './package-updater'
-    PackageUpdater.updatePackages(isAutoUpdate)
+    blacklist = atom.config.get("#{NAMESPACE}.#{CONFIG_KEY_BLACKLIST}")
+    blacklist = blacklist.split(/,\s*/)
+    PackageUpdater.updatePackages(isAutoUpdate, blacklist)
     @saveLastUpdateTime()
 
   getAutoUpdateBlockDuration: ->
-    minutes = atom.config.get([NAMESPACE, CONFIG_KEY_INTERVAL_MINUTES].join('.'))
+    minutes = atom.config.get("#{NAMESPACE}.#{CONFIG_KEY_INTERVAL_MINUTES}")
 
     if minutes < MINIMUM_AUTO_UPDATE_BLOCK_DURATION_MINUTES
       minutes = MINIMUM_AUTO_UPDATE_BLOCK_DURATION_MINUTES
