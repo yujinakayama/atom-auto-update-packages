@@ -7,9 +7,11 @@ getFs = ->
 
 NAMESPACE = 'auto-update-packages'
 CONFIG_KEY_INTERVAL_MINUTES = 'intervalMinutes'
+CONFIG_KEY_HUMANIZED_PACKAGE_NAMES = 'humanizedPackageNames'
 
 CONFIG_DEFAULTS = {}
 CONFIG_DEFAULTS[CONFIG_KEY_INTERVAL_MINUTES] = 6 * 60
+CONFIG_DEFAULTS[CONFIG_KEY_HUMANIZED_PACKAGE_NAMES] = false
 
 WARMUP_WAIT = 10 * 1000
 MINIMUM_AUTO_UPDATE_BLOCK_DURATION_MINUTES = 15
@@ -54,7 +56,12 @@ module.exports =
 
   updatePackages: (isAutoUpdate = true) ->
     PackageUpdater ?= require './package-updater'
-    PackageUpdater.updatePackages(isAutoUpdate)
+    humanizedPackageNames =
+      atom.config.get("#{NAMESPACE}.#{CONFIG_KEY_HUMANIZED_PACKAGE_NAMES}")
+    options =
+      auto: isAutoUpdate
+      humanize: humanizedPackageNames
+    PackageUpdater.updatePackages(options)
     @saveLastUpdateTime()
 
   getAutoUpdateBlockDuration: ->

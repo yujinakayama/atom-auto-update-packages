@@ -1,15 +1,17 @@
 path = require 'path'
 glob = require 'glob'
 {BufferedProcess} = require 'atom'
+S = require './util/string'
 
 ATOM_BUNDLE_IDENTIFIER = 'com.github.atom'
 INSTALLATION_LINE_PATTERN = /^Installing +([^@]+)@(\S+).+\s+(\S+)$/
 
 module.exports =
-  updatePackages: (isAutoUpdate = true) ->
+  updatePackages: (options={}) ->
+    @options = options
     @runApmUpgrade (log) =>
       entries = @parseLog(log)
-      summary = @generateSummary(entries, isAutoUpdate)
+      summary = @generateSummary(entries)
       return unless summary
       @notify
         title: 'Atom Package Updates'
@@ -46,13 +48,13 @@ module.exports =
       'version': version
       'isInstalled': result == '\u2713'
 
-  generateSummary: (entries, isAutoUpdate = true) ->
+  generateSummary: (entries) ->
     successfulEntries = entries.filter (entry) ->
       entry.isInstalled
     return null unless successfulEntries.length > 0
 
-    names = successfulEntries.map (entry) ->
-      entry.name
+    names = successfulEntries.map (entry) =>
+      @formatPackageName(entry.name)
 
     summary =
       if successfulEntries.length <= 5
@@ -62,9 +64,15 @@ module.exports =
 
     summary += if successfulEntries.length == 1 then ' has' else ' have'
     summary += ' been updated'
-    summary += ' automatically' if isAutoUpdate
+    summary += ' automatically' if @options.auto
     summary += '.'
     summary
+
+  formatPackageName: (packageName) ->
+    if @options.humanize
+      S.humanize(packageName)
+    else
+      packageName
 
   generateEnumerationExpression: (items) ->
     expression = ''
