@@ -4,11 +4,10 @@ glob = require 'glob'
 S = require './util/string'
 
 ATOM_BUNDLE_IDENTIFIER = 'com.github.atom'
-INSTALLATION_LINE_PATTERN = /^Installing +([^@]+)@(\S+).+\s+(\S+)$/
+INSTALLATION_LINE_PATTERN = /^Installing +(\S+).+\s+(\S+)$/
 
 module.exports =
-  updatePackages: (options={}) ->
-    @options = options
+  updatePackages: (@options={}) ->
     @runApmUpgrade (log) =>
       entries = @parseLog(log)
       summary = @generateSummary(entries)
@@ -19,10 +18,8 @@ module.exports =
         sender: ATOM_BUNDLE_IDENTIFIER
         activate: ATOM_BUNDLE_IDENTIFIER
 
-  runApmUpgrade: (callback) ->
+  runApmCommand: (args, callback) ->
     command = atom.packages.getApmPath()
-    args = ['upgrade', '--no-confirm', '--no-color']
-
     log = ''
 
     stdout = (data) ->
@@ -33,6 +30,28 @@ module.exports =
 
     new BufferedProcess({command, args, stdout, exit})
 
+  runApmUpgrade: (callback) ->
+    args = ['upgrade', '--list', '--json', '--no-color']
+
+    @runApmCommand args, (log) =>
+      blacklist = @options.blacklist
+      packageList = JSON.parse(log)
+      outdatedPackages = (pack.name for pack in packageList)
+
+      if blacklist?.length
+        outdatedPackages = @filterPackages(outdatedPackages)
+
+      @runApmInstall outdatedPackages, callback
+
+  runApmInstall: (packages, callback) ->
+    args = ['install', '--no-color'].concat(packages)
+
+    @runApmCommand args, callback
+
+  filterPackages: (packages) ->
+    blacklist = @options.blacklist
+    pack for pack in packages when @formatPackageName(pack) not in blacklist
+
   # Parsing the output of apm is a dirty way, but using atom-package-manager directly via JavaScript
   # is probably more brittle than parsing the output since it's a private package.
   # /Applications/Atom.app/Contents/Resources/app/apm/node_modules/atom-package-manager
@@ -42,10 +61,9 @@ module.exports =
     for line in lines
       matches = line.match(INSTALLATION_LINE_PATTERN)
       continue unless matches?
-      [_match, name, version, result] = matches
+      [_match, name, result] = matches
 
       'name': name
-      'version': version
       'isInstalled': result == '\u2713'
 
   generateSummary: (entries) ->

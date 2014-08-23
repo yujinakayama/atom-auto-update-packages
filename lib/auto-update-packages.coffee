@@ -8,10 +8,12 @@ getFs = ->
 NAMESPACE = 'auto-update-packages'
 CONFIG_KEY_INTERVAL_MINUTES = 'intervalMinutes'
 CONFIG_KEY_HUMANIZED_PACKAGE_NAMES = 'humanizedPackageNames'
+CONFIG_KEY_BLACKLIST = 'blacklist'
 
 CONFIG_DEFAULTS = {}
 CONFIG_DEFAULTS[CONFIG_KEY_INTERVAL_MINUTES] = 6 * 60
 CONFIG_DEFAULTS[CONFIG_KEY_HUMANIZED_PACKAGE_NAMES] = false
+CONFIG_DEFAULTS[CONFIG_KEY_BLACKLIST] = []
 
 WARMUP_WAIT = 10 * 1000
 MINIMUM_AUTO_UPDATE_BLOCK_DURATION_MINUTES = 15
@@ -58,9 +60,12 @@ module.exports =
     PackageUpdater ?= require './package-updater'
     humanizedPackageNames =
       atom.config.get("#{NAMESPACE}.#{CONFIG_KEY_HUMANIZED_PACKAGE_NAMES}")
+    blacklist = atom.config.get("#{NAMESPACE}.#{CONFIG_KEY_BLACKLIST}")
     options =
       auto: isAutoUpdate
       humanize: humanizedPackageNames
+      blacklist: blacklist
+
     PackageUpdater.updatePackages(options)
     @saveLastUpdateTime()
 
