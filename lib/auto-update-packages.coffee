@@ -56,7 +56,7 @@ module.exports =
     if Date.now() > lastUpdateTime + @getAutoUpdateBlockDuration()
       @updatePackages()
 
-  updatePackages: (isAutoUpdate = true) ->
+  updatePackages: (isAutoUpdate=true) ->
     PackageUpdater ?= require './package-updater'
     humanizedPackageNames =
       atom.config.get("#{NAMESPACE}.#{CONFIG_KEY_HUMANIZED_PACKAGE_NAMES}")
@@ -70,7 +70,7 @@ module.exports =
     @saveLastUpdateTime()
 
   getAutoUpdateBlockDuration: ->
-    minutes = atom.config.get([NAMESPACE, CONFIG_KEY_INTERVAL_MINUTES].join('.'))
+    minutes = atom.config.get("#{NAMESPACE}.#{CONFIG_KEY_INTERVAL_MINUTES}")
 
     if minutes < MINIMUM_AUTO_UPDATE_BLOCK_DURATION_MINUTES
       minutes = MINIMUM_AUTO_UPDATE_BLOCK_DURATION_MINUTES

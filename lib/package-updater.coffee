@@ -64,15 +64,13 @@ module.exports =
       [_match, name, result] = matches
 
       'name': name
-      'isInstalled': result == '\u2713'
+      'isInstalled': result is '\u2713'
 
   generateSummary: (entries) ->
-    successfulEntries = entries.filter (entry) ->
-      entry.isInstalled
-    return null unless successfulEntries.length > 0
+    successfulEntries = (entry for entry in entries when entry.isInstalled)
+    return null unless successfulEntries.length
 
-    names = successfulEntries.map (entry) =>
-      @formatPackageName(entry.name)
+    names = (@formatPackageName(entry.name) for entry in entries)
 
     summary =
       if successfulEntries.length <= 5
@@ -80,7 +78,7 @@ module.exports =
       else
         "#{successfulEntries.length} packages"
 
-    summary += if successfulEntries.length == 1 then ' has' else ' have'
+    summary += if successfulEntries.length is 1 then ' has' else ' have'
     summary += ' been updated'
     summary += ' automatically' if @options.auto
     summary += '.'
@@ -118,14 +116,9 @@ module.exports =
     new BufferedProcess({command, args})
 
   getTerminalNotifierPath: ->
-    unless @cachedTerminalNotifierPath == undefined
-      return @cachedTerminalNotifierPath
+    return @cachedTerminalNotifierPath if @cachedTerminalNotifierPath?
 
     pattern = path.join(__dirname, '..', 'vendor', '**', 'terminal-notifier')
     paths = glob.sync(pattern)
 
-    @cachedTerminalNotifierPath =
-      if paths.length == 0
-        null
-      else
-        paths[0]
+    @cachedTerminalNotifierPath = paths[0]
