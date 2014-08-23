@@ -11,7 +11,9 @@ module.exports =
     @runApmUpgrade (log) =>
       entries = @parseLog(log)
       summary = @generateSummary(entries)
-      return unless summary
+      unless summary
+        return if @options.auto
+        summary = 'No package updates available'
       @notify
         title: 'Atom Package Updates'
         message: summary
