@@ -100,6 +100,7 @@ module.exports =
         if index + 1 < items.length
           expression += ', '
         else
+          expression += ',' if items.length > 2
           expression += ' and '
 
       expression += item
