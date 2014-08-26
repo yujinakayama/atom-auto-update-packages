@@ -20,11 +20,6 @@ task :lint do
   system('coffeelint lib spec') || fail
 end
 
-task default: [:compile, :spec, :lint]
-
-# Cannot run `apm test` on CI since Atom is still closed beta.
-task ci: [:compile, :lint]
-
 namespace :vendor do
   desc 'Vendorize terminal-notifier'
   task :terminal_notifier do
@@ -41,3 +36,16 @@ namespace :vendor do
     end
   end
 end
+
+namespace :travis do
+  task :prepare do
+    sh 'npm install --global coffee-script coffeelint'
+  end
+
+  task :spec do
+    sh 'curl -s https://raw.githubusercontent.com/atom/ci/master/build-package.sh | sh'
+  end
+end
+
+task default: [:compile, :spec, :lint]
+task travis: ['travis:prepare', :compile, 'travis:spec', :lint]
