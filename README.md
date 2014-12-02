@@ -73,6 +73,14 @@ or
 
 if [**Humanized Package Names**](#humanized-package-names) is checked
 
+### Disable Notification
+
+* Config Key Path: `auto-update-packages.disableNotification`
+* Default: false
+
+Disables the notification on automatic package updates. This will still show a
+notification if you have triggered a manual update.
+
 ## License
 
 Copyright (c) 2014 Yuji Nakayama
