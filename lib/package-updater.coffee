@@ -14,11 +14,12 @@ module.exports =
       unless summary
         return if @options.auto
         summary = 'No package updates available'
-      @notify
-        title: 'Atom Package Updates'
-        message: summary
-        sender: ATOM_BUNDLE_IDENTIFIER
-        activate: ATOM_BUNDLE_IDENTIFIER
+      unless @options.auto && @options.disableNotification
+        @notify
+          title: 'Atom Package Updates'
+          message: summary
+          sender: ATOM_BUNDLE_IDENTIFIER
+          activate: ATOM_BUNDLE_IDENTIFIER
 
   runApmCommand: (args, callback) ->
     command = atom.packages.getApmPath()
