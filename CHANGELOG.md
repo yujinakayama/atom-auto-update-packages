@@ -2,6 +2,10 @@
 
 ## Development
 
+## v0.2.2
+
+* [#10](https://github.com/yujinakayama/atom-auto-update-packages/issues/10) Fix error "Uncaught RangeError: Maximum call stack size exceeded" with Atom 0.162.0 ([@yujinakayama])
+
 ## v0.2.1
 
 * Always display the input field for the custom auto-update interval in the Settings view. ([@yujinakayama])

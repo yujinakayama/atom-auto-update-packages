@@ -9,7 +9,7 @@
     "darwin"
   ],
   "engines": {
-    "atom": ">0.50.0"
+    "atom": ">0.162.0"
   },
   "dependencies": {
     "glob": "^3.2.9",
