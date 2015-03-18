@@ -18,7 +18,7 @@ module.exports =
   configDefaults: CONFIG_DEFAULTS
 
   activate: (state) ->
-    atom.workspaceView.command "#{NAMESPACE}:update-now", =>
+    @updateNowCommand = atom.commands.add 'atom-workspace', "#{NAMESPACE}:update-now", =>
       @updatePackages(false)
 
     setTimeout =>
@@ -27,7 +27,7 @@ module.exports =
 
   deactivate: ->
     @disableAutoUpdate()
-    atom.workspaceView.off "#{NAMESPACE}:update-now"
+    @updateNowCommand.dispose()
 
   enableAutoUpdate: ->
     @updatePackagesIfAutoUpdateBlockIsExpired()
