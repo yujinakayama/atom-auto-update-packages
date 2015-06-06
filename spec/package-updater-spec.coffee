@@ -2,9 +2,6 @@ PackageUpdater = require '../lib/package-updater'
 require './spec-helper'
 
 describe 'PackageUpdater', ->
-  beforeEach ->
-    prepareCleanEnvironment()
-
   afterEach ->
     restoreEnvironment()
 

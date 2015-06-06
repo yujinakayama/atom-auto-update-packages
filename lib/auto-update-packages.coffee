@@ -62,7 +62,7 @@ module.exports =
   getAutoUpdateBlockDuration: ->
     minutes = atom.config.get("#{NAMESPACE}.intervalMinutes")
 
-    if minutes < MINIMUM_AUTO_UPDATE_BLOCK_DURATION_MINUTES
+    if isNaN(minutes) || minutes < MINIMUM_AUTO_UPDATE_BLOCK_DURATION_MINUTES
       minutes = MINIMUM_AUTO_UPDATE_BLOCK_DURATION_MINUTES
 
     minutes * 60 * 1000
