@@ -4,9 +4,6 @@ PackageUpdater = require '../lib/package-updater'
 require './spec-helper'
 
 describe 'auto-upgrade-packages', ->
-  beforeEach ->
-    prepareCleanEnvironment()
-
   afterEach ->
     restoreEnvironment()
 
@@ -52,7 +49,10 @@ describe 'auto-upgrade-packages', ->
         expect(AutoUpdatePackages.updatePackages).not.toHaveBeenCalled()
 
   describe '.getAutoUpdateBlockDuration', ->
-    describe 'when "auto-update-packages.intervalMinutes" is not set', ->
+    describe 'when "auto-update-packages.intervalMinutes" is 360', ->
+      beforeEach ->
+        atom.config.set('auto-update-packages.intervalMinutes', 360)
+
       it 'returns 21600000 (6 hours)', ->
         expect(AutoUpdatePackages.getAutoUpdateBlockDuration()).toBe(21600000)
 
@@ -71,9 +71,9 @@ describe 'auto-upgrade-packages', ->
         expect(AutoUpdatePackages.getAutoUpdateBlockDuration()).toBe(900000)
 
   describe '.getAutoUpdateCheckInterval', ->
-    describe 'when "auto-update-packages.intervalMinutes" is not set', ->
+    describe 'when "auto-update-packages.intervalMinutes" is 360', ->
       beforeEach ->
-        atom.config.set('auto-update-packages.intervalMinutes', null)
+        atom.config.set('auto-update-packages.intervalMinutes', 360)
 
       it 'returns 1440000 (24 minutes)', ->
         expect(AutoUpdatePackages.getAutoUpdateCheckInterval()).toBe(1440000)
