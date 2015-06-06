@@ -18,8 +18,9 @@ module.exports =
       title: 'Auto-Update Interval Minutes'
 
   activate: (state) ->
-    atom.workspaceView.command "#{NAMESPACE}:update-now", =>
-      @updatePackages(false)
+    commands = {}
+    commands["#{NAMESPACE}:update-now"] = => @updatePackages(false)
+    @commandSubscription = atom.commands.add('atom-workspace', commands)
 
     setTimeout =>
       @enableAutoUpdate()
@@ -27,7 +28,8 @@ module.exports =
 
   deactivate: ->
     @disableAutoUpdate()
-    atom.workspaceView.off "#{NAMESPACE}:update-now"
+    @commandSubscription?.dispose()
+    @commandSubscription = null
 
   enableAutoUpdate: ->
     @updatePackagesIfAutoUpdateBlockIsExpired()
