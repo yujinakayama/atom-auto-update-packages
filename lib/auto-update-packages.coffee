@@ -41,7 +41,7 @@ module.exports =
       @enableAutoUpdate()
 
   disableAutoUpdate: ->
-    @configSubscription?.off()
+    @configSubscription?.dispose()
     @configSubscription = null
 
     clearInterval(@autoUpdateCheck) if @autoUpdateCheck
