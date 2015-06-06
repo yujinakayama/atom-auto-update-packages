@@ -6,16 +6,16 @@ getFs = ->
   fs ?= require 'fs-plus'
 
 NAMESPACE = 'auto-update-packages'
-CONFIG_KEY_INTERVAL_MINUTES = 'intervalMinutes'
-
-CONFIG_DEFAULTS = {}
-CONFIG_DEFAULTS[CONFIG_KEY_INTERVAL_MINUTES] = 6 * 60
-
 WARMUP_WAIT = 10 * 1000
 MINIMUM_AUTO_UPDATE_BLOCK_DURATION_MINUTES = 15
 
 module.exports =
-  configDefaults: CONFIG_DEFAULTS
+  config:
+    intervalMinutes:
+      type: 'integer'
+      minimum: MINIMUM_AUTO_UPDATE_BLOCK_DURATION_MINUTES
+      default: 6 * 60
+      title: 'Auto-Update Interval Minutes'
 
   activate: (state) ->
     atom.workspaceView.command "#{NAMESPACE}:update-now", =>
@@ -58,7 +58,7 @@ module.exports =
     @saveLastUpdateTime()
 
   getAutoUpdateBlockDuration: ->
-    minutes = atom.config.get([NAMESPACE, CONFIG_KEY_INTERVAL_MINUTES].join('.'))
+    minutes = atom.config.get("#{NAMESPACE}.intervalMinutes")
 
     if minutes < MINIMUM_AUTO_UPDATE_BLOCK_DURATION_MINUTES
       minutes = MINIMUM_AUTO_UPDATE_BLOCK_DURATION_MINUTES
