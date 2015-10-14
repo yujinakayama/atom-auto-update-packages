@@ -1,15 +1,12 @@
 {
   "name": "auto-update-packages",
   "main": "./lib/auto-update-packages",
-  "version": "1.0.0",
-  "description": "Keep your Atom packages up to date.",
-  "repository": "https://github.com/yujinakayama/atom-auto-update-packages",
+  "version": "1.0.1",
+  "description": "Keep your Atom packages up to date, automatically",
+  "repository": "https://github.com/wufuC/atom-auto-update-packages",
   "license": "MIT",
-  "os": [
-    "darwin"
-  ],
   "engines": {
-    "atom": ">=0.206.0"
+    "atom": "1.0.0"
   },
   "dependencies": {
     "glob": "^3.2.9",
