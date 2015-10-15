@@ -1,9 +1,10 @@
-fs = null
-path = null
+# fs = null
+# path = null
+fileIO = null
 PackageUpdater = null
 
-getFs = ->
-  fs ?= require 'fs-plus'
+# getFs = ->
+#   fs ?= require 'fs-plus'
 
 NAMESPACE = 'auto-update-packages'
 WARMUP_WAIT = 10 * 1000
@@ -18,6 +19,8 @@ module.exports =
       title: 'Auto-Update Interval Minutes'
 
   activate: (state) ->
+    fileIO ?= require './fileio_handler'
+
     commands = {}
     commands["#{NAMESPACE}:update-now"] = => @updatePackages(false)
     @commandSubscription = atom.commands.add('atom-workspace', commands)
@@ -50,15 +53,14 @@ module.exports =
     @autoUpdateCheck = null
 
   updatePackagesIfAutoUpdateBlockIsExpired: ->
-    lastUpdateTime = @loadLastUpdateTime() || 0
+    lastUpdateTime = fileIO.loadLastUpdateTime() || 0
     if Date.now() > lastUpdateTime + @getAutoUpdateBlockDuration()
       @updatePackages()
 
   updatePackages: (isAutoUpdate = true) ->
     PackageUpdater ?= require './package-updater'
-    packageUpdaterLog = PackageUpdater.updatePackages(isAutoUpdate)
-    @saveUpdateRecord(packageUpdaterLog)
-    @saveLastUpdateTime()
+    PackageUpdater.updatePackages(isAutoUpdate)
+    fileIO.saveLastUpdateTime()
 
   getAutoUpdateBlockDuration: ->
     minutes = atom.config.get("#{NAMESPACE}.intervalMinutes")
@@ -70,31 +72,3 @@ module.exports =
 
   getAutoUpdateCheckInterval: ->
     @getAutoUpdateBlockDuration() / 15
-
-  # auto-upgrade-packages runs on each Atom instance,
-  # so we need to share the last updated time via a file between the instances.
-  loadLastUpdateTime: ->
-    try
-      string = getFs().readFileSync(@getLastUpdateTimeFilePath())
-      parseInt(string)
-    catch
-      null
-
-  saveLastUpdateTime: ->
-    getFs().writeFileSync(@getLastUpdateTimeFilePath(), Date.now().toString())
-
-  setStoragePath: ->
-    path ?= require 'path'
-    dotAtomPath = getFs().absolute('~/.atom')
-    path.join(dotAtomPath, 'storage/')
-
-  getLastUpdateTimeFilePath: ->
-    # path ?= require 'path'
-    # dotAtomPath = getFs().absolute('~/.atom')
-    # path.join(dotAtomPath, 'storage', "#{NAMESPACE}-last-update-time")
-    @setStoragePath() + "#{NAMESPACE}-last-update-time"
-
-  saveUpdateRecord: (packageUpdaterLog) ->
-    historyFile = @setStoragePath() + "#{NAMESPACE}-update-history"
-    getFs().appendFileSync(historyFile, packageUpdaterLog)
-    console.log(packageUpdaterLog)

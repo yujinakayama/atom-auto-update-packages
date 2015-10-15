@@ -1,5 +1,6 @@
 # path = require 'path'
 # glob = require 'glob'
+fileIO = null
 {BufferedProcess} = require 'atom'
 
 # ATOM_BUNDLE_IDENTIFIER = 'com.github.atom'
@@ -13,6 +14,8 @@ module.exports =
       summary = @generateSummary(entries, isAutoUpdate)
       return unless summary? and record?
       atom.notifications.addInfo(summary)
+      fileIO ?= require './fileio_handler'
+      fileIO.saveUpdateRecord(record)
       # @notify
       #   title: 'Atom Package Updates'
       #   message: summary
