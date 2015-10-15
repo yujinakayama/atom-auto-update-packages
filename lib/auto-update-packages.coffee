@@ -1,10 +1,5 @@
-# fs = null
-# path = null
 fileIO = null
 PackageUpdater = null
-
-# getFs = ->
-#   fs ?= require 'fs-plus'
 
 NAMESPACE = 'auto-update-packages'
 WARMUP_WAIT = 10 * 1000

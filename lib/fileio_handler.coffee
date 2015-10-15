@@ -26,9 +26,6 @@ module.exports =
     path.join(dotAtomPath, 'storage/')
 
   getLastUpdateTimeFilePath: ->
-    # path ?= require 'path'
-    # dotAtomPath = getFs().absolute('~/.atom')
-    # path.join(dotAtomPath, 'storage', "#{NAMESPACE}-last-update-time")
     @setStoragePath() + "#{NAMESPACE}-last-update-time"
 
   saveUpdateRecord: (packageUpdaterLog) ->
