@@ -26,7 +26,8 @@ module.exports =
     path.join(dotAtomPath, 'storage/')
 
   getLastUpdateTimeFilePath: ->
-    @setStoragePath() + "#{NAMESPACE}-last-update-time"
+    timestampFile = @setStoragePath() + "#{NAMESPACE}-last-update-time"
+    timestampFile
 
   saveUpdateRecord: (packageUpdaterLog) ->
     historyFile = @setStoragePath() + "#{NAMESPACE}-update-history"

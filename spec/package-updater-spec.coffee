@@ -29,9 +29,13 @@ describe 'PackageUpdater', ->
         expect(entries[0].name).toBe('atom-lint')
         expect(entries[1].name).toBe('sort-lines')
 
-      it 'extracts package version', ->
-        expect(entries[0].version).toBe('0.8.1')
-        expect(entries[1].version).toBe('0.3.0')
+      it "extracts package curent version", ->
+        expect(entries[0].from_version).toBe('0.8.0')
+        expect(entries[1].from_version).toBe('0.1.0')
+
+      it "extracts package new available version", ->
+        expect(entries[0].to_version).toBe('0.8.1')
+        expect(entries[1].to_version).toBe('0.3.0')
 
       it 'recognizes success and failure', ->
         expect(entries[0].isInstalled).toBe(true)
