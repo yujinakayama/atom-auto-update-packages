@@ -1,5 +1,3 @@
-# path = require 'path'
-# glob = require 'glob'
 {BufferedProcess} = require 'atom'
 
 # ATOM_BUNDLE_IDENTIFIER = 'com.github.atom'
@@ -12,11 +10,6 @@ module.exports =
       summary = @generateSummary(entries, isAutoUpdate)
       return unless summary
       atom.notifications.addInfo(summary)
-      # @notify
-      #   title: 'Atom Package Updates'
-      #   message: summary
-      #   sender: ATOM_BUNDLE_IDENTIFIER
-      #   activate: ATOM_BUNDLE_IDENTIFIER
 
   runApmUpgrade: (callback) ->
     command = atom.packages.getApmPath()
@@ -80,26 +73,3 @@ module.exports =
       expression += item
 
     expression
-
-  # notify: (notification) ->
-  #   command = @getTerminalNotifierPath()
-  #   return console.log("terminal-notifier is not found.") unless command
-  #
-  #   args = []
-  #   for key, value of notification
-  #     args.push("-#{key}", value)
-  #
-  #   new BufferedProcess({command, args})
-  #
-  # getTerminalNotifierPath: ->
-  #   unless @cachedTerminalNotifierPath == undefined
-  #     return @cachedTerminalNotifierPath
-  #
-  #   pattern = path.join(__dirname, '..', 'vendor', '**', 'terminal-notifier')
-  #   paths = glob.sync(pattern)
-  #
-  #   @cachedTerminalNotifierPath =
-  #     if paths.length == 0
-  #       null
-  #     else
-  #       paths[0]
