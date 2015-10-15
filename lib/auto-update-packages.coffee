@@ -56,7 +56,8 @@ module.exports =
 
   updatePackages: (isAutoUpdate = true) ->
     PackageUpdater ?= require './package-updater'
-    PackageUpdater.updatePackages(isAutoUpdate)
+    packageUpdaterLog = PackageUpdater.updatePackages(isAutoUpdate)
+    @saveUpdateRecord(packageUpdaterLog)
     @saveLastUpdateTime()
 
   getAutoUpdateBlockDuration: ->
@@ -82,7 +83,18 @@ module.exports =
   saveLastUpdateTime: ->
     getFs().writeFileSync(@getLastUpdateTimeFilePath(), Date.now().toString())
 
-  getLastUpdateTimeFilePath: ->
+  setStoragePath: ->
     path ?= require 'path'
     dotAtomPath = getFs().absolute('~/.atom')
-    path.join(dotAtomPath, 'storage', "#{NAMESPACE}-last-update-time")
+    path.join(dotAtomPath, 'storage/')
+
+  getLastUpdateTimeFilePath: ->
+    # path ?= require 'path'
+    # dotAtomPath = getFs().absolute('~/.atom')
+    # path.join(dotAtomPath, 'storage', "#{NAMESPACE}-last-update-time")
+    @setStoragePath() + "#{NAMESPACE}-last-update-time"
+
+  saveUpdateRecord: (packageUpdaterLog) ->
+    historyFile = @setStoragePath() + "#{NAMESPACE}-update-history"
+    getFs().appendFileSync(historyFile, packageUpdaterLog)
+    console.log(packageUpdaterLog)
