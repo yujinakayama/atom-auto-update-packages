@@ -1,15 +1,13 @@
-fs = null
-path = null
+fileIO = null
 PackageUpdater = null
-
-getFs = ->
-  fs ?= require 'fs-plus'
 
 NAMESPACE = 'auto-update-packages'
 WARMUP_WAIT = 10 * 1000
 MINIMUM_AUTO_UPDATE_BLOCK_DURATION_MINUTES = 15
 
 module.exports =
+  namespace: NAMESPACE
+
   config:
     intervalMinutes:
       type: 'integer'
@@ -50,14 +48,16 @@ module.exports =
     @autoUpdateCheck = null
 
   updatePackagesIfAutoUpdateBlockIsExpired: ->
-    lastUpdateTime = @loadLastUpdateTime() || 0
+    fileIO ?= require './fileio-handler'
+    lastUpdateTime = fileIO.loadLastUpdateTime() || 0
     if Date.now() > lastUpdateTime + @getAutoUpdateBlockDuration()
       @updatePackages()
 
   updatePackages: (isAutoUpdate = true) ->
+    fileIO ?= require './fileio-handler'
     PackageUpdater ?= require './package-updater'
     PackageUpdater.updatePackages(isAutoUpdate)
-    @saveLastUpdateTime()
+    fileIO.saveLastUpdateTime()
 
   getAutoUpdateBlockDuration: ->
     minutes = atom.config.get("#{NAMESPACE}.intervalMinutes")
@@ -69,20 +69,3 @@ module.exports =
 
   getAutoUpdateCheckInterval: ->
     @getAutoUpdateBlockDuration() / 15
-
-  # auto-upgrade-packages runs on each Atom instance,
-  # so we need to share the last updated time via a file between the instances.
-  loadLastUpdateTime: ->
-    try
-      string = getFs().readFileSync(@getLastUpdateTimeFilePath())
-      parseInt(string)
-    catch
-      null
-
-  saveLastUpdateTime: ->
-    getFs().writeFileSync(@getLastUpdateTimeFilePath(), Date.now().toString())
-
-  getLastUpdateTimeFilePath: ->
-    path ?= require 'path'
-    dotAtomPath = getFs().absolute('~/.atom')
-    path.join(dotAtomPath, 'storage', "#{NAMESPACE}-last-update-time")

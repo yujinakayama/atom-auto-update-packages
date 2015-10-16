@@ -1,4 +1,5 @@
 fs = require 'fs'
+FileIOHandler = require '../lib/fileio-handler'
 AutoUpdatePackages = require '../lib/auto-update-packages'
 PackageUpdater = require '../lib/package-updater'
 require './spec-helper'
@@ -10,18 +11,18 @@ describe 'auto-upgrade-packages', ->
   describe '.loadLastUpdateTime', ->
     describe 'when no update has done ever', ->
       beforeEach ->
-        path = AutoUpdatePackages.getLastUpdateTimeFilePath()
+        path = FileIOHandler.getLastUpdateTimeFilePath()
         fs.unlinkSync(path) if fs.existsSync(path)
 
       it 'returns null', ->
-        expect(AutoUpdatePackages.loadLastUpdateTime()).toBeNull()
+        expect(FileIOHandler.loadLastUpdateTime()).toBeNull()
 
     describe 'when any update has done ever', ->
       beforeEach ->
-        AutoUpdatePackages.saveLastUpdateTime()
+        FileIOHandler.saveLastUpdateTime()
 
       it 'returns the time', ->
-        loadedTime = AutoUpdatePackages.loadLastUpdateTime()
+        loadedTime = FileIOHandler.loadLastUpdateTime()
         now = Date.now()
         # toBeCloseTo matcher allows only decimal numbers.
         expect(loadedTime).toBeLessThan(now + 1)
@@ -30,7 +31,7 @@ describe 'auto-upgrade-packages', ->
   describe '.updatePackagesIfAutoUpdateBlockIsExpired', ->
     describe 'when no update has done ever', ->
       beforeEach ->
-        path = AutoUpdatePackages.getLastUpdateTimeFilePath()
+        path = FileIOHandler.getLastUpdateTimeFilePath()
         fs.unlinkSync(path) if fs.existsSync(path)
 
       it 'runs update', ->
