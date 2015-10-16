@@ -12,7 +12,7 @@ module.exports =
       summary = @generateSummary(entries, isAutoUpdate)
       return unless summary? and record?
       atom.notifications.addInfo(summary)
-      fileIO ?= require './fileio_handler'
+      fileIO ?= require('./fileio_handler')
       fileIO.saveUpdateRecord(record)
 
   runApmUpgrade: (callback) ->
@@ -73,7 +73,10 @@ module.exports =
     for entry in entries
       outcome = if entry.isInstalled then '\u2713' else '\u2717'
       isAuto = if isAutoUpdate then 'auto' else 'manual'
-      logLine = "#{newUpdateRecordEntriesTime} | #{entry.name} #{entry.from_version} -> #{entry.to_version} | #{outcome} | #{isAuto}\n"
+      logLine = "#{newUpdateRecordEntriesTime} |
+                 #{entry.name} #{entry.from_version} -> #{entry.to_version} |
+                 #{outcome} |
+                 #{isAuto}\n"
       newUpdateRecordEntries += logLine
     newUpdateRecordEntries
 

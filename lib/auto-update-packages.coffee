@@ -6,6 +6,8 @@ WARMUP_WAIT = 10 * 1000
 MINIMUM_AUTO_UPDATE_BLOCK_DURATION_MINUTES = 15
 
 module.exports =
+  namespace: NAMESPACE
+
   config:
     intervalMinutes:
       type: 'integer'

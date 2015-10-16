@@ -3,8 +3,7 @@
 
 fs = null
 path = null
-
-NAMESPACE = 'auto-update-packages'
+NAMESPACE = null
 
 getFs = ->
   fs ?= require 'fs-plus'
@@ -26,10 +25,12 @@ module.exports =
     path.join(dotAtomPath, 'storage/')
 
   getLastUpdateTimeFilePath: ->
+    NAMESPACE ?= require('./auto-update-packages').namespace
     timestampFile = @setStoragePath() + "#{NAMESPACE}-last-update-time"
     timestampFile
 
   saveUpdateRecord: (packageUpdaterLog) ->
+    NAMESPACE ?= require('./auto-update-packages').namespace
     historyFile = @setStoragePath() + "#{NAMESPACE}-update-history"
     getFs().appendFileSync(historyFile, packageUpdaterLog)
     console.log(packageUpdaterLog)
