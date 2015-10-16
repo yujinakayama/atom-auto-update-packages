@@ -12,7 +12,7 @@ module.exports =
       summary = @generateSummary(entries, isAutoUpdate)
       return unless summary? and record?
       atom.notifications.addInfo(summary)
-      fileIO ?= require('./fileio_handler')
+      fileIO ?= require('./fileio-handler')
       fileIO.saveUpdateRecord(record)
 
   runApmUpgrade: (callback) ->

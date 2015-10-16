@@ -48,13 +48,13 @@ module.exports =
     @autoUpdateCheck = null
 
   updatePackagesIfAutoUpdateBlockIsExpired: ->
-    fileIO ?= require './fileio_handler'
+    fileIO ?= require './fileio-handler'
     lastUpdateTime = fileIO.loadLastUpdateTime() || 0
     if Date.now() > lastUpdateTime + @getAutoUpdateBlockDuration()
       @updatePackages()
 
   updatePackages: (isAutoUpdate = true) ->
-    fileIO ?= require './fileio_handler'
+    fileIO ?= require './fileio-handler'
     PackageUpdater ?= require './package-updater'
     PackageUpdater.updatePackages(isAutoUpdate)
     fileIO.saveLastUpdateTime()

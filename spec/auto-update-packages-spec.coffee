@@ -1,5 +1,5 @@
 fs = require 'fs'
-FileIOHandler = require '../lib/fileio_handler'
+FileIOHandler = require '../lib/fileio-handler'
 AutoUpdatePackages = require '../lib/auto-update-packages'
 PackageUpdater = require '../lib/package-updater'
 require './spec-helper'
