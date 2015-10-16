@@ -1,6 +1,5 @@
 {BufferedProcess} = require 'atom'
 
-# ATOM_BUNDLE_IDENTIFIER = 'com.github.atom'
 INSTALLATION_LINE_PATTERN = /^Installing +([^@]+)@(\S+).+\s+(\S+)$/
 
 module.exports =
