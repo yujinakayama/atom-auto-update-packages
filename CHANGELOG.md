@@ -2,6 +2,10 @@
 
 ## Development
 
+## v1.0.1
+
+* Observe config changes only in `auto-update-packages` namespace so that changes by other packages don't hit performance. ([@ypresto])
+
 ## v1.0.0
 
 * Conform to Atom API 1.0. ([@yujinakayama])
@@ -35,3 +39,4 @@
 * Initial release. ([@yujinakayama])
 
 [@yujinakayama]: https://github.com/yujinakayama
+[@ypresto]: https://github.com/ypresto
