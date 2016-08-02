@@ -84,5 +84,4 @@ module.exports =
 
   getLastUpdateTimeFilePath: ->
     path ?= require 'path'
-    dotAtomPath = getFs().absolute('~/.atom')
-    path.join(dotAtomPath, 'storage', "#{NAMESPACE}-last-update-time")
+    path.join(atom.configDirPath, 'storage', "#{NAMESPACE}-last-update-time")
